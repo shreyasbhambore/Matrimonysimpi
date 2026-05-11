@@ -5,12 +5,12 @@ const stories = [
   {
     names: "Priya & Rahul",
     location: "Mumbai",
-    text: "We found each other through this platform and knew instantly that we were meant to be. Thank you for helping us find our happily ever after!",
+    text: "We found each other through Namdevsimpi Matrimony and knew instantly that we were meant to be. Thank you for helping us find our happily ever after!",
   },
   {
     names: "Ananya & Vikram",
     location: "Bangalore",
-    text: "The platform made it so easy for our families to connect. We are grateful for the trust and transparency throughout our journey.",
+    text: "Namdevsimpi Matrimony made it so easy for our families to connect. We are grateful for the trust and transparency throughout our journey.",
   },
   {
     names: "Meera & Arjun",
@@ -26,7 +26,7 @@ export function SuccessStories() {
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-serif font-bold">Success Stories</h2>
           <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
-            Real couples who found their perfect match through our platform.
+            Real couples who found their perfect match through Namdevsimpi Matrimony.
           </p>
         </div>
 

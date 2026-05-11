@@ -1,8 +1,8 @@
 import { ProfileView } from "@/components/profile-view"
 
 export const metadata = {
-  title: "Profile | Matrimony",
-  description: "View profile",
+  title: "Profile | Namdevsimpi Matrimony",
+  description: "View profile on Namdevsimpi Matrimony - Find your perfect life partner",
 }
 
 export default function ProfilePage({

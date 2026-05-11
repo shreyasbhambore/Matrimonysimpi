@@ -7,17 +7,17 @@ import { cn } from "@/lib/utils"
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif" })
 
-// Matrimony Platform - Phase 1 Foundation
+// Namdevsimpi Matrimony - Premium Community Matrimonial Platform
 export const metadata: Metadata = {
   title: {
-    default: "Matrimony - Find Your Perfect Life Partner",
-    template: "%s | Matrimony",
+    default: "Namdevsimpi Matrimony - Find Your Perfect Life Partner",
+    template: "%s | Namdevsimpi Matrimony",
   },
-  description: "Trusted community matrimony platform for meaningful connections. Find your perfect life partner with verified profiles and secure matching.",
-  keywords: ["matrimony", "marriage", "matchmaking", "Indian matrimony", "community matrimony"],
+  description: "Namdevsimpi Matrimony - Trusted premium community matrimony platform for meaningful connections. Find your perfect life partner with verified profiles and secure matching.",
+  keywords: ["namdevsimpi", "matrimony", "marriage", "matchmaking", "Indian matrimony", "community matrimony", "namdevsimpi matrimony"],
   openGraph: {
-    title: "Matrimony - Find Your Perfect Life Partner",
-    description: "Trusted community matrimony platform for meaningful connections.",
+    title: "Namdevsimpi Matrimony - Find Your Perfect Life Partner",
+    description: "Namdevsimpi Matrimony - Trusted community matrimony platform for meaningful connections.",
     type: "website",
     locale: "en_IN",
   },

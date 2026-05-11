@@ -26,7 +26,7 @@ export function HeroSection() {
             </h1>
             
             <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0">
-              Trusted matrimony platform for meaningful community connections. Join thousands of families who found their perfect match with us.
+              Namdevsimpi Matrimony - Trusted platform for meaningful community connections. Join thousands of families who found their perfect match with us.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
