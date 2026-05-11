@@ -49,7 +49,7 @@ export function AdvancedFilters({ onApply, compact = false }: AdvancedFiltersPro
 
   const [isOpen, setIsOpen] = useState(!compact)
 
-  const handleFilterChange = (filterKey: string, value: string) => {
+  const handleFilterChange = (filterKey: string, value: string | null) => {
     setFilters((prev) => ({
       ...prev,
       [filterKey]: value || ''
