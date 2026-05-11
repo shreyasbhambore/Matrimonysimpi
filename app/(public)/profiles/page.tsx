@@ -2,7 +2,8 @@ import { ProfileCard } from "@/components/cards/profile-card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
-import { Search, SlidersHorizontal } from "lucide-react"
+import { Search } from "lucide-react"
+import { AdvancedFilters } from "@/components/filters/advanced-filters"
 
 const profiles = [
   { id: "1", name: "Priya S.", age: 26, city: "Mumbai", profession: "Software Engineer", education: "B.Tech, IIT Mumbai", image: null },
@@ -29,7 +30,7 @@ export default function ProfilesPage() {
         <p className="text-muted-foreground mt-2">Find your perfect match from verified profiles</p>
       </div>
 
-      {/* Filters */}
+      {/* Quick Filters */}
       <div className="bg-card rounded-xl border p-4 mb-8">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="relative flex-1">
@@ -58,11 +59,13 @@ export default function ProfilesPage() {
               <SelectItem value="36+">36+</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" className="h-11">
-            <SlidersHorizontal className="size-4 mr-2" />
-            More Filters
-          </Button>
         </div>
+      </div>
+
+      {/* Advanced Filters Section */}
+      <div className="bg-card rounded-xl border p-4 md:p-6 mb-8">
+        <h3 className="text-lg font-semibold mb-4 text-foreground">Advanced Filters</h3>
+        <AdvancedFilters compact={true} />
       </div>
 
       {/* Results */}
