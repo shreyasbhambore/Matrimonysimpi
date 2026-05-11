@@ -262,7 +262,7 @@ export function EditProfileForm() {
                   label="Height"
                   value={profile?.height || ""}
                   onChange={(value) => setProfile({ ...profile, height: value })}
-                  placeholder="e.g., 5'10\""
+                  placeholder={'e.g., 5\'10"'}
                 />
                 <FormSelect
                   label="Body Type"
