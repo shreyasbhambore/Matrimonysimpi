@@ -26,7 +26,7 @@ export function PremiumCarousel() {
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
-  const autoPlayTimerRef = useRef<NodeJS.Timeout>()
+  const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   // Fetch featured profiles from API
   useEffect(() => {
