@@ -6728,7 +6728,7 @@ Ensure:
 
 * Public pages remain SEO optimized
 * Private data protected
-* Sensitive routes excluded from indexing
+* Sensitive routes excluded from indexinga
 
 ==================================================
 OUTPUT REQUIREMENTS
