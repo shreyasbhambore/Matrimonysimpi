@@ -1,8 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
 import { ChatMessaging } from '@/components/chat/chat-messaging'
 import { ConversationsList } from '@/components/chat/conversations-list'
 
