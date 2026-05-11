@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS global_membership_settings (
 -- Insert default global membership settings
 INSERT INTO global_membership_settings (setting_key, is_membership_enabled, description)
 VALUES ('MEMBERSHIP_FEATURE_ENABLED', FALSE, 'Global toggle for membership feature visibility')
-ON CONFLICT (setting_key) DO NOTHING;
+ON CONFLICT (setting_key) DO UPDATE SET is_membership_enabled = EXCLUDED.is_membership_enabled;
 
 -- Create indexes
 CREATE INDEX IF NOT EXISTS idx_membership_settings_user_id ON membership_settings(user_id);

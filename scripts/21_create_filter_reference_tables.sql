@@ -100,7 +100,7 @@ VALUES
   ('Capricorn', '♑', 'Dec 22', 'Jan 19', 'Earth'),
   ('Aquarius', '♒', 'Jan 20', 'Feb 18', 'Air'),
   ('Pisces', '♓', 'Feb 19', 'Mar 20', 'Water')
-ON CONFLICT (name) DO NOTHING;
+ON CONFLICT (name) DO UPDATE SET symbol = EXCLUDED.symbol;
 
 -- Insert common Nakshatra data
 INSERT INTO nakshatra_reference (name, description)
@@ -117,7 +117,7 @@ VALUES
   ('Magha', 'The mighty one, ancestral'),
   ('Purva Phalguni', 'The former reddish one'),
   ('Uttara Phalguni', 'The latter reddish one')
-ON CONFLICT (name) DO NOTHING;
+ON CONFLICT (name) DO UPDATE SET description = EXCLUDED.description;
 
 -- Insert common Gotra data
 INSERT INTO gotra_reference (name, religion)
@@ -130,4 +130,4 @@ VALUES
   ('Gautama', 'Hindu'),
   ('Vishvamitra', 'Hindu'),
   ('Agastya', 'Hindu')
-ON CONFLICT (name) DO NOTHING;
+ON CONFLICT (name) DO UPDATE SET religion = EXCLUDED.religion;

@@ -16,5 +16,4 @@ CREATE INDEX IF NOT EXISTS idx_profiles_horoscope_match ON profiles(horoscope_ma
 -- Update RLS policies to allow users to read filter data from public profiles
 CREATE POLICY "Users can view profile filters"
   ON profiles FOR SELECT
-  USING (true) -- Allow public viewing of filter data for search
-ON CONFLICT DO NOTHING;
+  USING (true); -- Allow public viewing of filter data for search
