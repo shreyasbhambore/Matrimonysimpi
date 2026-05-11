@@ -1,6 +1,6 @@
 import { HeroSection } from "@/components/home/hero-section"
 import { QuickSearch } from "@/components/home/quick-search"
-import { FeaturedProfiles } from "@/components/home/featured-profiles"
+import { PremiumCarousel } from "@/components/home/premium-carousel"
 import { WhyChooseUs } from "@/components/home/why-choose-us"
 import { SuccessStories } from "@/components/home/success-stories"
 import { CTASection } from "@/components/home/cta-section"
@@ -10,7 +10,7 @@ export default function HomePage() {
     <>
       <HeroSection />
       <QuickSearch />
-      <FeaturedProfiles />
+      <PremiumCarousel />
       <WhyChooseUs />
       <SuccessStories />
       <CTASection />
