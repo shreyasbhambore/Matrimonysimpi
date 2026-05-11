@@ -36,7 +36,7 @@ export function DashboardSidebar() {
       <div className="p-6 border-b">
         <Link href="/" className="flex items-center gap-2">
           <Heart className="size-7 text-primary fill-primary" />
-          <span className="font-serif text-xl font-semibold text-primary">Matrimony</span>
+          <span className="font-serif text-xl font-semibold text-primary">Namdevsimpi Matrimony</span>
         </Link>
       </div>
 

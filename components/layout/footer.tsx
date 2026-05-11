@@ -27,10 +27,10 @@ export function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
               <Heart className="size-6 text-primary fill-primary" />
-              <span className="font-serif text-lg font-semibold text-primary">Matrimony</span>
+              <span className="font-serif text-lg font-semibold text-primary">Namdevsimpi Matrimony</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Trusted community matrimony platform helping families find meaningful connections since 2024.
+              Trusted community matrimony platform by Namdevsimpi helping families find meaningful connections since 2024.
             </p>
           </div>
 

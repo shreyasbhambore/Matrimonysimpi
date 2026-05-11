@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
       religion,
       caste,
       location,
+      city,
       occupation,
       height_min,
       height_max,
@@ -41,6 +42,7 @@ export async function POST(request: NextRequest) {
       annual_income_max,
       marital_status,
       education,
+      education_status,
       page = 1,
       limit = 20,
     } = body;
@@ -73,9 +75,14 @@ export async function POST(request: NextRequest) {
       query = query.eq("caste", caste);
     }
 
-    // Location filter
+    // Location filter (state/region)
     if (location) {
       query = query.ilike("location", `%${location}%`);
+    }
+
+    // City filter (specific city in Karnataka)
+    if (city) {
+      query = query.ilike("location", `%${city}%`);
     }
 
     // Occupation filter
@@ -83,34 +90,14 @@ export async function POST(request: NextRequest) {
       query = query.ilike("occupation", `%${occupation}%`);
     }
 
-    // Height filter
-    if (height_min || height_max) {
-      if (height_min) {
-        query = query.gte("height", height_min);
-      }
-      if (height_max) {
-        query = query.lte("height", height_max);
-      }
-    }
-
-    // Annual income filter
-    if (annual_income_min || annual_income_max) {
-      if (annual_income_min) {
-        query = query.gte("annual_income", annual_income_min);
-      }
-      if (annual_income_max) {
-        query = query.lte("annual_income", annual_income_max);
-      }
-    }
-
-    // Marital status filter
-    if (marital_status) {
-      query = query.eq("marital_status", marital_status);
-    }
-
     // Education filter
     if (education) {
       query = query.eq("education", education);
+    }
+
+    // Education status filter (working, student, etc.)
+    if (education_status) {
+      query = query.eq("education_status", education_status);
     }
 
     // Pagination
