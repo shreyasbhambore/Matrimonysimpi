@@ -1,9 +1,6 @@
-import { SettingsPage } from "@/components/dashboard/settings-page"
+'use client'
 
-export const metadata = {
-  title: "Settings | Matrimony",
-  description: "Manage your account settings",
-}
+import { SettingsPage } from "@/components/dashboard/settings-page"
 
 export default function SettingsRoute() {
   return <SettingsPage />

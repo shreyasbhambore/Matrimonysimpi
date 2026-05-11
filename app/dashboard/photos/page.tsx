@@ -1,9 +1,6 @@
-import { ProfilePhotoGallery } from "@/components/dashboard/profile-photo-gallery"
+'use client'
 
-export const metadata = {
-  title: "Profile Photos | Matrimony",
-  description: "Manage your profile photos",
-}
+import { ProfilePhotoGallery } from "@/components/dashboard/profile-photo-gallery"
 
 export default function PhotosPage() {
   return <ProfilePhotoGallery />

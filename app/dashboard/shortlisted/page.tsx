@@ -1,9 +1,6 @@
-import { ShortlistedProfiles } from "@/components/dashboard/shortlisted-profiles"
+'use client'
 
-export const metadata = {
-  title: "Shortlisted Profiles | Matrimony",
-  description: "View your shortlisted profiles",
-}
+import { ShortlistedProfiles } from "@/components/dashboard/shortlisted-profiles"
 
 export default function ShortlistedPage() {
   return <ShortlistedProfiles />
