@@ -1,9 +1,6 @@
-import { EditProfileForm } from "@/components/dashboard/edit-profile-form"
+'use client'
 
-export const metadata = {
-  title: "Edit Profile | Matrimony",
-  description: "Update your profile information",
-}
+import { EditProfileForm } from "@/components/dashboard/edit-profile-form"
 
 export default function EditProfilePage() {
   return <EditProfileForm />
