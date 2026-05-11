@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS user_settings (
   id UUID PRIMARY KEY REFERENCES profiles(id) ON DELETE CASCADE,
   
   -- Privacy settings
-  profile_visibility TEXT DEFAULT 'public', -- 'public', 'premium-only', 'hidden'
+  profile_visibility TEXT DEFAULT 'public', -- 'public', 'prem-only', 'hidden'
   who_sees_photos TEXT DEFAULT 'premium', -- 'everyone', 'verified', 'premium', 'none'
   who_sees_contact TEXT DEFAULT 'premium', -- 'everyone', 'verified', 'premium', 'none'
   allow_profile_views BOOLEAN DEFAULT TRUE,
