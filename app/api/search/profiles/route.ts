@@ -51,18 +51,14 @@ export async function POST(request: NextRequest) {
     let query = supabase
       .from("profiles")
       .select("*, profile_photos(*)", { count: "exact" })
-      .neq("user_id", user.id) // Don't show own profile
-      .eq("profile_visibility", "public");
+      .neq("id", user.id); // Don't show own profile
 
-    // Age filter
-    if (age_min || age_max) {
-      const currentYear = new Date().getFullYear();
-      if (age_min) {
-        query = query.lte("date_of_birth", new Date(currentYear - age_min, 0, 1).toISOString());
-      }
-      if (age_max) {
-        query = query.gte("date_of_birth", new Date(currentYear - age_max, 11, 31).toISOString());
-      }
+    // Age filter (using age column directly)
+    if (age_min) {
+      query = query.gte("age", age_min);
+    }
+    if (age_max) {
+      query = query.lte("age", age_max);
     }
 
     // Religion filter
@@ -75,19 +71,19 @@ export async function POST(request: NextRequest) {
       query = query.eq("caste", caste);
     }
 
-    // Location filter (state/region)
+    // State/Location filter
     if (location) {
-      query = query.ilike("location", `%${location}%`);
+      query = query.ilike("state", `%${location}%`);
     }
 
     // City filter (specific city in Karnataka)
     if (city) {
-      query = query.ilike("location", `%${city}%`);
+      query = query.ilike("city", `%${city}%`);
     }
 
-    // Occupation filter
+    // Profession/Occupation filter
     if (occupation) {
-      query = query.ilike("occupation", `%${occupation}%`);
+      query = query.ilike("profession", `%${occupation}%`);
     }
 
     // Education filter
@@ -98,6 +94,11 @@ export async function POST(request: NextRequest) {
     // Education status filter (working, student, etc.)
     if (education_status) {
       query = query.eq("education_status", education_status);
+    }
+
+    // Marital status filter
+    if (marital_status) {
+      query = query.eq("marital_status", marital_status);
     }
 
     // Pagination

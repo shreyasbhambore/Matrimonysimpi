@@ -29,7 +29,7 @@ export function WhyChooseUs() {
     <section className="py-16 md:py-24 bg-card">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold">Why Choose Us</h2>
+          <h2 className="text-3xl md:text-4xl font-serif font-bold">Why Choose Namdevsimpi Matrimony</h2>
           <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
             We are committed to helping you find your perfect life partner with trust and transparency.
           </p>
