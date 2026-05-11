@@ -26,9 +26,11 @@ export function MatchesDiscovery() {
   const [filters, setFilters] = useState({
     age_min: 18,
     age_max: 65,
-    location: '',
+    location: 'Karnataka',
+    city: '',
     religion: '',
     education: '',
+    education_status: '',
   })
 
   useEffect(() => {
@@ -88,7 +90,7 @@ export function MatchesDiscovery() {
         {/* Filters */}
         <div className="bg-white rounded-lg border p-6 mb-8 shadow-sm">
           <form onSubmit={handleSearch} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Min Age
@@ -123,15 +125,25 @@ export function MatchesDiscovery() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Location
+                  City
                 </label>
-                <input
-                  type="text"
-                  placeholder="City or region"
-                  value={filters.location}
-                  onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+                <select
+                  value={filters.city}
+                  onChange={(e) => setFilters({ ...filters, city: e.target.value })}
                   className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                />
+                >
+                  <option value="">All Cities</option>
+                  <option value="Bangalore">Bangalore</option>
+                  <option value="Mysore">Mysore</option>
+                  <option value="Mangalore">Mangalore</option>
+                  <option value="Udupi">Udupi</option>
+                  <option value="Hubli">Hubli</option>
+                  <option value="Belgaum">Belgaum</option>
+                  <option value="Tumkur">Tumkur</option>
+                  <option value="Davangere">Davangere</option>
+                  <option value="Hassan">Hassan</option>
+                  <option value="Chikmagalur">Chikmagalur</option>
+                </select>
               </div>
 
               <div>
@@ -166,6 +178,24 @@ export function MatchesDiscovery() {
                   <option value="Bachelor">Bachelor</option>
                   <option value="Master">Master</option>
                   <option value="PhD">PhD</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Status
+                </label>
+                <select
+                  value={filters.education_status}
+                  onChange={(e) => setFilters({ ...filters, education_status: e.target.value })}
+                  className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                >
+                  <option value="">Any</option>
+                  <option value="Working">Working</option>
+                  <option value="Student">Student</option>
+                  <option value="Business">Business</option>
+                  <option value="Homemaker">Homemaker</option>
+                  <option value="Not Working">Not Working</option>
                 </select>
               </div>
             </div>
