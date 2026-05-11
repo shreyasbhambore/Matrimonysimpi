@@ -56,6 +56,12 @@ export default function LoginPage() {
         return
       }
 
+      if (email.trim().length === 0 || password.trim().length === 0) {
+        setError("Please enter valid email and password")
+        setLoading(false)
+        return
+      }
+
       if (password.length < 6) {
         setError("Password must be at least 6 characters")
         setLoading(false)
@@ -64,19 +70,27 @@ export default function LoginPage() {
 
       const supabase = createClient()
 
+      console.log("[v0] Attempting login with email:", email)
+
       // Sign in with email and password
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+        email: email.trim().toLowerCase(),
+        password: password.trim(),
       })
+
+      console.log("[v0] Sign in response:", { data, error: signInError })
 
       if (signInError) {
         console.error("[v0] Sign in error:", signInError)
         
-        if (signInError.status === 400) {
-          setError("Invalid email or password. Please try again.")
+        if (signInError.status === 400 || signInError.message?.includes("Invalid login credentials")) {
+          setError("Invalid email or password. Please check and try again.")
         } else if (signInError.status === 422) {
-          setError("Please check your email and password")
+          setError("Invalid email format. Please provide a valid email address.")
+        } else if (signInError.status === 429) {
+          setError("Too many login attempts. Please try again later.")
+        } else if (signInError.message?.includes("Email not confirmed")) {
+          setError("Please verify your email before logging in.")
         } else {
           setError(signInError.message || "Failed to sign in. Please try again.")
         }
@@ -85,11 +99,13 @@ export default function LoginPage() {
       }
 
       if (!data?.session) {
-        setError("Failed to create session. Please try again.")
+        console.error("[v0] No session created after login")
+        setError("Login successful but session not created. Please try again.")
         setLoading(false)
         return
       }
 
+      console.log("[v0] Login successful, redirecting to dashboard")
       setSuccess("Login successful! Redirecting...")
       
       // Wait a moment for user to see success message
@@ -99,7 +115,7 @@ export default function LoginPage() {
       }, 500)
     } catch (err) {
       console.error("[v0] Login error:", err)
-      setError(err instanceof Error ? err.message : "An unexpected error occurred")
+      setError(err instanceof Error ? err.message : "An unexpected error occurred. Please try again.")
       setLoading(false)
     }
   }
@@ -108,20 +124,30 @@ export default function LoginPage() {
     try {
       setLoading(true)
       const supabase = createClient()
-      const { error } = await supabase.auth.signInWithOAuth({
+      
+      console.log("[v0] Starting Google OAuth flow")
+      
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         },
       })
 
+      console.log("[v0] Google OAuth response:", { data, error })
+
       if (error) {
-        setError(error.message)
+        console.error("[v0] Google OAuth error:", error)
+        setError(error.message || "Failed to sign in with Google. Please try again.")
         setLoading(false)
       }
     } catch (err) {
       console.error("[v0] Google login error:", err)
-      setError("Failed to sign in with Google")
+      setError(err instanceof Error ? err.message : "Failed to sign in with Google")
       setLoading(false)
     }
   }
@@ -250,10 +276,18 @@ export default function LoginPage() {
         </Card>
 
         {/* Demo Credentials */}
-        <div className="mt-6 p-4 rounded-lg bg-muted/50 border">
-          <p className="text-xs font-medium text-foreground mb-2">Demo Credentials:</p>
-          <p className="text-xs text-muted-foreground">Email: demo@example.com</p>
-          <p className="text-xs text-muted-foreground">Password: Demo@123456</p>
+        <div className="mt-6 p-4 rounded-lg bg-muted/50 border space-y-2">
+          <p className="text-xs font-medium text-foreground">Demo Credentials:</p>
+          <div className="text-xs text-muted-foreground space-y-1">
+            <p><strong>Admin Account:</strong></p>
+            <p>Email: admin@matrimonysimpi.com</p>
+            <p>Password: Supariking</p>
+          </div>
+          <div className="text-xs text-muted-foreground space-y-1 pt-2 border-t">
+            <p><strong>Test User Account:</strong></p>
+            <p>Email: priya.sharma@example.com</p>
+            <p>Password: Supariking</p>
+          </div>
         </div>
       </div>
     </div>
