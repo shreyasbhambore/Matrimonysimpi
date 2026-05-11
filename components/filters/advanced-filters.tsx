@@ -52,14 +52,14 @@ export function AdvancedFilters({ onApply, compact = false }: AdvancedFiltersPro
   const handleFilterChange = (filterKey: string, value: string) => {
     setFilters((prev) => ({
       ...prev,
-      [filterKey]: value
+      [filterKey]: value || ''
     }))
   }
 
   const handleApply = () => {
     if (onApply) {
       const activeFilters = Object.fromEntries(
-        Object.entries(filters).filter(([_, value]) => value !== '')
+        Object.entries(filters).filter(([_, value]) => value && value !== '')
       )
       onApply(activeFilters)
     }
@@ -75,7 +75,7 @@ export function AdvancedFilters({ onApply, compact = false }: AdvancedFiltersPro
     })
   }
 
-  const activeFilterCount = Object.values(filters).filter((v) => v !== '').length
+  const activeFilterCount = Object.values(filters).filter((v) => v && v !== '').length
 
   if (compact) {
     return (
@@ -96,7 +96,7 @@ export function AdvancedFilters({ onApply, compact = false }: AdvancedFiltersPro
           <div className="border rounded-lg p-4 space-y-4 bg-card">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Rashi */}
-              <Select value={filters.rashi} onValueChange={(value) => handleFilterChange('rashi', value)}>
+              <Select value={filters.rashi || ''} onValueChange={(value) => handleFilterChange('rashi', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select Rashi" />
                 </SelectTrigger>
@@ -111,7 +111,7 @@ export function AdvancedFilters({ onApply, compact = false }: AdvancedFiltersPro
               </Select>
 
               {/* Nakshatra */}
-              <Select value={filters.nakshatra} onValueChange={(value) => handleFilterChange('nakshatra', value)}>
+              <Select value={filters.nakshatra || ''} onValueChange={(value) => handleFilterChange('nakshatra', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select Nakshatra" />
                 </SelectTrigger>
@@ -126,7 +126,7 @@ export function AdvancedFilters({ onApply, compact = false }: AdvancedFiltersPro
               </Select>
 
               {/* Gotra */}
-              <Select value={filters.gotra} onValueChange={(value) => handleFilterChange('gotra', value)}>
+              <Select value={filters.gotra || ''} onValueChange={(value) => handleFilterChange('gotra', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select Gotra" />
                 </SelectTrigger>
@@ -141,7 +141,7 @@ export function AdvancedFilters({ onApply, compact = false }: AdvancedFiltersPro
               </Select>
 
               {/* Horoscope Match */}
-              <Select value={filters.horoscope_match} onValueChange={(value) => handleFilterChange('horoscope_match', value)}>
+              <Select value={filters.horoscope_match || ''} onValueChange={(value) => handleFilterChange('horoscope_match', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Horoscope Compatibility" />
                 </SelectTrigger>
@@ -156,7 +156,7 @@ export function AdvancedFilters({ onApply, compact = false }: AdvancedFiltersPro
               </Select>
 
               {/* City */}
-              <Select value={filters.city} onValueChange={(value) => handleFilterChange('city', value)}>
+              <Select value={filters.city || ''} onValueChange={(value) => handleFilterChange('city', value)}>
                 <SelectTrigger className="md:col-span-2">
                   <SelectValue placeholder="Select Karnataka City" />
                 </SelectTrigger>
@@ -193,7 +193,7 @@ export function AdvancedFilters({ onApply, compact = false }: AdvancedFiltersPro
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {/* Rashi */}
-        <Select value={filters.rashi} onValueChange={(value) => handleFilterChange('rashi', value)}>
+        <Select value={filters.rashi || ''} onValueChange={(value) => handleFilterChange('rashi', value)}>
           <SelectTrigger className="h-12">
             <SelectValue placeholder="Rashi" />
           </SelectTrigger>
@@ -208,7 +208,7 @@ export function AdvancedFilters({ onApply, compact = false }: AdvancedFiltersPro
         </Select>
 
         {/* Nakshatra */}
-        <Select value={filters.nakshatra} onValueChange={(value) => handleFilterChange('nakshatra', value)}>
+        <Select value={filters.nakshatra || ''} onValueChange={(value) => handleFilterChange('nakshatra', value)}>
           <SelectTrigger className="h-12">
             <SelectValue placeholder="Nakshatra" />
           </SelectTrigger>
@@ -223,7 +223,7 @@ export function AdvancedFilters({ onApply, compact = false }: AdvancedFiltersPro
         </Select>
 
         {/* Gotra */}
-        <Select value={filters.gotra} onValueChange={(value) => handleFilterChange('gotra', value)}>
+        <Select value={filters.gotra || ''} onValueChange={(value) => handleFilterChange('gotra', value)}>
           <SelectTrigger className="h-12">
             <SelectValue placeholder="Gotra" />
           </SelectTrigger>
@@ -238,7 +238,7 @@ export function AdvancedFilters({ onApply, compact = false }: AdvancedFiltersPro
         </Select>
 
         {/* Horoscope Match */}
-        <Select value={filters.horoscope_match} onValueChange={(value) => handleFilterChange('horoscope_match', value)}>
+        <Select value={filters.horoscope_match || ''} onValueChange={(value) => handleFilterChange('horoscope_match', value)}>
           <SelectTrigger className="h-12">
             <SelectValue placeholder="Horoscope" />
           </SelectTrigger>
@@ -260,7 +260,7 @@ export function AdvancedFilters({ onApply, compact = false }: AdvancedFiltersPro
 
       {/* City Filter on second row */}
       <div className="max-w-lg">
-        <Select value={filters.city} onValueChange={(value) => handleFilterChange('city', value)}>
+        <Select value={filters.city || ''} onValueChange={(value) => handleFilterChange('city', value)}>
           <SelectTrigger className="h-12">
             <SelectValue placeholder="Karnataka Cities" />
           </SelectTrigger>
