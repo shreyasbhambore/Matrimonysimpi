@@ -29,7 +29,6 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { createClient } from '@/lib/supabase/client'
 
 interface DashboardStats {
   totalUsers: number
@@ -57,7 +56,7 @@ interface Profile {
 
 interface User {
   id: string
-  email: string
+  email?: string
   created_at: string
   user_metadata?: {
     full_name?: string
@@ -84,8 +83,6 @@ export function AdminDashboard() {
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null)
   const [editingMembership, setEditingMembership] = useState<string | null>(null)
 
-  const supabase = createClient()
-
   // Fetch admin data on mount
   useEffect(() => {
     fetchAdminData()
@@ -96,48 +93,21 @@ export function AdminDashboard() {
       setLoading(true)
       setError(null)
 
-      console.log('[v0] Fetching admin data...')
+      console.log('[v0] Fetching admin data via API...')
 
-      // Fetch users
-      const { data: usersData, error: usersError } = await supabase.auth.admin.listUsers()
-      if (usersError) throw usersError
-      setUsers(usersData?.users || [])
+      // Fetch all admin data from the API route (uses service role key)
+      const response = await fetch('/api/admin/data')
+      const data = await response.json()
 
-      // Fetch profiles
-      const { data: profilesData, error: profilesError } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false })
-      if (profilesError) throw profilesError
-      setProfiles(profilesData || [])
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch admin data')
+      }
 
-      // Fetch membership settings
-      const { data: membershipData, error: membershipError } = await supabase
-        .from('user_membership_settings')
-        .select('*')
-      if (membershipError) throw membershipError
-      setMembershipSettings(membershipData || [])
-
-      // Fetch global membership setting
-      const { data: globalData, error: globalError } = await supabase
-        .from('global_membership_settings')
-        .select('is_membership_enabled')
-        .eq('setting_key', 'MEMBERSHIP_FEATURE_ENABLED')
-        .single()
-      if (globalError && globalError.code !== 'PGRST116') throw globalError
-      setGlobalMembershipEnabled(globalData?.is_membership_enabled || false)
-
-      // Calculate stats
-      const verifiedProfiles = (profilesData || []).filter((p) => p.is_verified).length
-      const featuredProfiles = (profilesData || []).filter((p) => p.is_featured).length
-
-      setStats({
-        totalUsers: usersData?.users?.length || 0,
-        totalProfiles: profilesData?.length || 0,
-        verifiedProfiles,
-        featuredProfiles,
-        membershipEnabled: globalMembershipEnabled,
-      })
+      setUsers(data.users || [])
+      setProfiles(data.profiles || [])
+      setMembershipSettings(data.membershipSettings || [])
+      setGlobalMembershipEnabled(data.globalMembershipEnabled || false)
+      setStats(data.stats)
 
       console.log('[v0] Admin data fetched successfully')
     } catch (err) {
@@ -154,8 +124,13 @@ export function AdminDashboard() {
 
     try {
       setLoading(true)
-      const { error } = await supabase.auth.admin.deleteUser(userId)
-      if (error) throw error
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete_user', userId }),
+      })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error)
 
       setUsers(users.filter((u) => u.id !== userId))
       console.log('[v0] User deleted successfully')
@@ -171,12 +146,13 @@ export function AdminDashboard() {
   const handleVerifyProfile = async (profileId: string) => {
     try {
       setLoading(true)
-      const { error } = await supabase
-        .from('profiles')
-        .update({ is_verified: true, verification_status: 'verified' })
-        .eq('id', profileId)
-
-      if (error) throw error
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'verify_profile', profileId }),
+      })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error)
 
       setProfiles(profiles.map((p) => (p.id === profileId ? { ...p, is_verified: true } : p)))
       console.log('[v0] Profile verified')
@@ -192,12 +168,13 @@ export function AdminDashboard() {
   const handleToggleFeatured = async (profileId: string, isFeatured: boolean) => {
     try {
       setLoading(true)
-      const { error } = await supabase
-        .from('profiles')
-        .update({ is_featured: !isFeatured })
-        .eq('id', profileId)
-
-      if (error) throw error
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'toggle_featured', profileId, data: { is_featured: !isFeatured } }),
+      })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error)
 
       setProfiles(profiles.map((p) => (p.id === profileId ? { ...p, is_featured: !isFeatured } : p)))
       console.log('[v0] Profile featured toggle updated')
@@ -215,9 +192,13 @@ export function AdminDashboard() {
 
     try {
       setLoading(true)
-      const { error } = await supabase.from('profiles').delete().eq('id', profileId)
-
-      if (error) throw error
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete_profile', profileId }),
+      })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error)
 
       setProfiles(profiles.filter((p) => p.id !== profileId))
       console.log('[v0] Profile deleted')
@@ -233,17 +214,32 @@ export function AdminDashboard() {
   const handleToggleMembership = async (userId: string, currentStatus: boolean) => {
     try {
       setLoading(true)
-      const { error } = await supabase
-        .from('user_membership_settings')
-        .upsert({ user_id: userId, is_membership_active: !currentStatus }, { onConflict: 'user_id' })
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'toggle_user_membership',
+          userId,
+          data: { is_membership_active: !currentStatus },
+        }),
+      })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error)
 
-      if (error) throw error
-
-      setMembershipSettings(
-        membershipSettings.map((m) =>
-          m.user_id === userId ? { ...m, is_membership_active: !currentStatus } : m,
-        ),
-      )
+      // Update local state - add if not exists, update if exists
+      const existingIndex = membershipSettings.findIndex((m) => m.user_id === userId)
+      if (existingIndex >= 0) {
+        setMembershipSettings(
+          membershipSettings.map((m) =>
+            m.user_id === userId ? { ...m, is_membership_active: !currentStatus } : m,
+          ),
+        )
+      } else {
+        setMembershipSettings([
+          ...membershipSettings,
+          { user_id: userId, is_membership_active: !currentStatus },
+        ])
+      }
       console.log('[v0] Membership status updated')
     } catch (err) {
       console.error('[v0] Error updating membership:', err)
@@ -257,17 +253,16 @@ export function AdminDashboard() {
   const handleToggleGlobalMembership = async () => {
     try {
       setLoading(true)
-      const { error } = await supabase
-        .from('global_membership_settings')
-        .upsert(
-          {
-            setting_key: 'MEMBERSHIP_FEATURE_ENABLED',
-            is_membership_enabled: !globalMembershipEnabled,
-          },
-          { onConflict: 'setting_key' },
-        )
-
-      if (error) throw error
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'toggle_global_membership',
+          data: { is_membership_enabled: !globalMembershipEnabled },
+        }),
+      })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error)
 
       setGlobalMembershipEnabled(!globalMembershipEnabled)
       if (stats) {
@@ -283,10 +278,12 @@ export function AdminDashboard() {
   }
 
   // Logout
-  const handleLogout = async () => {
+  const handleLogout = () => {
     try {
-      await supabase.auth.signOut()
-      router.push('/login')
+      // Clear admin session storage
+      sessionStorage.removeItem('admin_authenticated')
+      sessionStorage.removeItem('admin_login_time')
+      router.push('/admin')
     } catch (err) {
       console.error('[v0] Logout error:', err)
     }
@@ -448,31 +445,33 @@ export function AdminDashboard() {
                     {users.map((user) => (
                       <div key={user.id} className="border rounded-lg p-4 flex items-center justify-between">
                         <div>
-                          <p className="font-medium">{user.email}</p>
+                          <p className="font-medium">{user.email || 'No email'}</p>
                           <p className="text-xs text-muted-foreground">
                             Joined {new Date(user.created_at).toLocaleDateString()}
                           </p>
                         </div>
                         <div className="flex gap-2">
                           <Dialog>
-                            <DialogTrigger asChild>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setSelectedUser(user)}
-                              >
-                                <Edit2 className="size-4" />
-                              </Button>
+                            <DialogTrigger
+                              render={
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setSelectedUser(user)}
+                                />
+                              }
+                            >
+                              <Edit2 className="size-4" />
                             </DialogTrigger>
                             <DialogContent>
                               <DialogHeader>
                                 <DialogTitle>Edit User</DialogTitle>
-                                <DialogDescription>{user.email}</DialogDescription>
+                                <DialogDescription>{user.email || 'No email'}</DialogDescription>
                               </DialogHeader>
                               <div className="space-y-4 py-4">
                                 <div>
                                   <label className="text-sm font-medium">Email</label>
-                                  <Input value={user.email} disabled />
+                                  <Input value={user.email || ''} disabled />
                                 </div>
                                 <div>
                                   <label className="text-sm font-medium">Joined</label>
@@ -614,7 +613,7 @@ export function AdminDashboard() {
                             className="border rounded-lg p-3 flex items-center justify-between"
                           >
                             <div>
-                              <p className="text-sm font-medium">{user.email}</p>
+                              <p className="text-sm font-medium">{user.email || 'No email'}</p>
                               <p className="text-xs text-muted-foreground">
                                 {isActive ? 'Member' : 'Free'}
                               </p>
